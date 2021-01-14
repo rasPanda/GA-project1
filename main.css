@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid black;
+}
+
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  margin: 0;
+  padding: 10px;
+}
+
+.headerelement {
+  border: 1px solid black;
+  padding: 2px;
+  margin: 0;
+}
+
+#grid {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid black;
+  flex-wrap: wrap;
+}
+
+.cell {
+  border: 1px solid black;
+  font-size: 15px;
+  margin: 0;
+  padding: 0;
+}
+
+.covered {
+  background-color: black;
+}
