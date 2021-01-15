@@ -16,6 +16,7 @@ main {
   display: flex;
   flex-direction: column;
   border: 1px solid black;
+  background: lightgray;
 }
 
 #header {
@@ -62,4 +63,8 @@ main {
   background-size: contain;
   content: url('./images/bomb.png');
   position: relative;
+}
+
+.dead {
+  background: red;
 }
