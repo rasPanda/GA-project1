@@ -68,3 +68,48 @@ main {
 .dead {
   background: red;
 }
+
+._0 {
+  background: url('./images/0.png') no-repeat;
+  background-size: contain;
+}
+
+._1 {
+  background: url('./images/1.png') no-repeat;
+  background-size: contain;
+}
+
+._2 {
+  background: url('./images/2.png') no-repeat;
+  background-size: contain;
+}
+
+._3 {
+  background: url('./images/3.png') no-repeat;
+  background-size: contain;
+}
+
+._4 {
+  background: url('./images/4.png') no-repeat;
+  background-size: contain;
+}
+
+._5 {
+  background: url('./images/5.png') no-repeat;
+  background-size: contain;
+}
+
+._6 {
+  background: url('./images/6.png') no-repeat;
+  background-size: contain;
+}
+
+._7 {
+  background: url('./images/7.png') no-repeat;
+  background-size: contain;
+}
+
+._8 {
+  background: url('./images/8.png') no-repeat;
+  background-size: contain;
+}

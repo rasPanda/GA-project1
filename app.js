@@ -15,7 +15,6 @@ let minesLeft = 10
 const cellsArr = []
 const minesArr = []
 const flaggedArr = []
-const neighbourArr = []
 
 console.log(cellsArr)
 console.log(minesArr)
@@ -62,7 +61,7 @@ function setMines() {
 }
 
 
-function createFlagged() {
+function createFlaggedArr() {
   for (let index = 0; index < cellsArr.length; index++) {
     flaggedArr.push(false)
   }
@@ -91,40 +90,48 @@ function createEventListeners() {
 }
 
 
-function revealCell(cellId) {
-  if (detectPosition()) {
-
+function revealCell (cellId) {
+  const neighbourArr = detectNeighbours(cellId)
+  const numOfMinesArr = []
+  for (let index = 0; index < neighbourArr.length; index++) {
+    numOfMinesArr.push(minesArr[neighbourArr[index]])
   }
+  return numOfMinesArr.filter(x => x).length
 }
 
-function detectPosition(cellId) {
+// function countNeighbours (neighbourArr) {
+//   // const neighbours = []
+//   console.log(neighbourArr) 
+// }
+
+function detectNeighbours(cellId) {
   if (cellId === 0) {
     console.log('top left!')
-
+    return [1, parseInt(width), (width + 1)]
   } else if (cellId === width - 1) {
     console.log('top right!')
-
+    return [(width - 2), (width * 2 - 2), (width * 2 - 1)]
   } else if (cellId === width * height - 1) {
     console.log('bottom right!')
-
+    return [(width * height - 2), (width * height - width - 2), (width * height - width - 1)]
   } else if (cellId === width * height - width) {
     console.log('bottom left!')
-
+    return [(width * height - width + 1), (width * height - width * 2), (width * height - width * 2 + 1)]
   } else if (cellId < width) {
     console.log('top row!')
-
+    return [(cellId - 1), (cellId + 1), (cellId + width - 1), (cellId + width), (cellId + width + 1)]
   } else if (cellId % width === 0) {
     console.log('left row!')
-
+    return [(cellId - width), (cellId - width + 1), (cellId + 1), (cellId + width), (cellId + width + 1)]
   } else if ((cellId + width) >= width * height) {
     console.log('bottom row!')
-
+    return [(cellId - width - 1), (cellId - width), (cellId - width + 1), (cellId - 1), (cellId + 1)]
   } else if (cellId % width === width - 1) {
     console.log('right row!')
-
+    return [(cellId - width - 1), (cellId - width), (cellId - 1), (cellId + width - 1), (cellId + width)]
   } else {
     console.log('middle!')
-
+    return [(cellId - width - 1), (cellId - width), (cellId - width + 1), (cellId - 1), (cellId + 1), (cellId + width - 1), (cellId + width), (cellId + width + 1)]
   }
 }
 
@@ -145,8 +152,28 @@ function leftClick(event) {
     cellsArr[event.currentTarget.id].classList.add('dead')
     // endGame()
   } else {
+    if (revealCell((parseInt(event.currentTarget.id))) === 0) {
+      event.currentTarget.classList.add('_0')
+
+
+
+      const neighbours = detectNeighbours(parseInt(event.currentTarget.id))
+      // for (let index = 0; index < neighbours.length; index++) {
+      //   console.log(neighbours)
+      // }
+      console.log(neighbours)
+
+
+
+
+    } else {
+      event.currentTarget.classList.remove('facingDown')
+      event.currentTarget.classList.add(`_${revealCell((parseInt(event.currentTarget.id)))}`)
+      console.log(detectNeighbours(parseInt(event.currentTarget.id)))
+    }
     // console.log(event.currentTarget.id)
-    detectPosition(parseInt(event.currentTarget.id))
+    // revealCell((parseInt(event.currentTarget.id)))
+    // countNeighbours(detectNeighbours(parseInt(event.currentTarget.id)))
   }
 }
 
@@ -166,6 +193,8 @@ function rightClick(event) {
   }
 }
 
+//! Middle click
+
 function middleClick(event) {
   console.log('middle click!')
 }
@@ -180,35 +209,6 @@ function endGame() {
 setTimeout(() => {
   createGrid()
   setMines()
-  createFlagged()
+  createFlaggedArr()
   createEventListeners()
 }, 1)
-
-
-
-
-// cellsArr.forEach((cell) => {
-//   cell.addEventListener('contextmenu', (event) => {
-//     console.log('right click!')
-//     if (flaggedArr[event.currentTarget.id] === false) {
-//       event.preventDefault()
-//       event.currentTarget.classList.remove('facingDown')
-//       event.currentTarget.classList.add('flagged')
-//       flaggedArr[event.currentTarget.id] = true
-//     } else {
-//       event.preventDefault()
-//       event.currentTarget.classList.remove('flagged')
-//       event.currentTarget.classList.add('facingDown')
-//       flaggedArr[event.currentTarget.id] = false
-//     }
-//   })
-// })
-
-
-
-
-// cellsArr.forEach((cell) => {
-//   cell.addEventListener('click', (event) => {
-//     console.log(event)
-//   })
-// })
