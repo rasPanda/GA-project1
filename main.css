@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  font-size: 10px;
 }
 
 body {
@@ -22,7 +23,8 @@ main {
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  margin: 0;
+  border: 1px solid black;
+  margin: 5px 5px 0px 5px;
   padding: 10px;
 }
 
@@ -35,17 +37,29 @@ main {
 #grid {
   display: flex;
   flex-direction: row;
-  border: 1px solid black;
   flex-wrap: wrap;
+  margin: 5px;
 }
 
-.cell {
-  border: 1px solid black;
-  font-size: 15px;
-  margin: 0;
-  padding: 0;
+
+.facingDown {
+  background: url('./images/facingDown.png') no-repeat;
+  background-size: contain;
 }
 
-.covered {
-  background-color: black;
+.revealed {
+  background: url('./images/0.png') no-repeat;
+  background-size: contain;
+}
+
+.flagged {
+  background: url('./images/flagged.png') no-repeat;
+  background-size: contain;
+}
+
+.mine {
+  background: url('./images/0.png') no-repeat;
+  background-size: contain;
+  content: url('./images/bomb.png');
+  position: relative;
 }
