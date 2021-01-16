@@ -2,6 +2,7 @@
 
 const setupGrid = document.getElementById('grid')
 // const gameGrid = Array.from(document.getElementById('grid'))
+// console.log(gameGrid)
 
 //! Variables
 
@@ -71,7 +72,7 @@ function createFlaggedArr() {
 function createEventListeners() {
   cellsArr.forEach((cell) => {
     cell.addEventListener('click', (event) => {
-      leftClick(event)
+      leftClick((parseInt(event.currentTarget.id)))
     })
   })
   cellsArr.forEach((cell) => {
@@ -90,8 +91,8 @@ function createEventListeners() {
 }
 
 
-function revealCell (cellId) {
-  const neighbourArr = detectNeighbours(cellId)
+function countNeighbours(cellId) {
+  const neighbourArr = createNeighboursArr(cellId)
   const numOfMinesArr = []
   for (let index = 0; index < neighbourArr.length; index++) {
     numOfMinesArr.push(minesArr[neighbourArr[index]])
@@ -104,43 +105,55 @@ function revealCell (cellId) {
 //   console.log(neighbourArr) 
 // }
 
-function detectNeighbours(cellId) {
+function createNeighboursArr(cellId) {
   if (cellId === 0) {
-    console.log('top left!')
+    // console.log('top left!')
     return [1, parseInt(width), (width + 1)]
   } else if (cellId === width - 1) {
-    console.log('top right!')
+    // console.log('top right!')
     return [(width - 2), (width * 2 - 2), (width * 2 - 1)]
   } else if (cellId === width * height - 1) {
-    console.log('bottom right!')
+    // console.log('bottom right!')
     return [(width * height - 2), (width * height - width - 2), (width * height - width - 1)]
   } else if (cellId === width * height - width) {
-    console.log('bottom left!')
+    // console.log('bottom left!')
     return [(width * height - width + 1), (width * height - width * 2), (width * height - width * 2 + 1)]
   } else if (cellId < width) {
-    console.log('top row!')
+    // console.log('top row!')
     return [(cellId - 1), (cellId + 1), (cellId + width - 1), (cellId + width), (cellId + width + 1)]
   } else if (cellId % width === 0) {
-    console.log('left row!')
+    // console.log('left row!')
     return [(cellId - width), (cellId - width + 1), (cellId + 1), (cellId + width), (cellId + width + 1)]
   } else if ((cellId + width) >= width * height) {
-    console.log('bottom row!')
+    // console.log('bottom row!')
     return [(cellId - width - 1), (cellId - width), (cellId - width + 1), (cellId - 1), (cellId + 1)]
   } else if (cellId % width === width - 1) {
-    console.log('right row!')
+    // console.log('right row!')
     return [(cellId - width - 1), (cellId - width), (cellId - 1), (cellId + width - 1), (cellId + width)]
   } else {
-    console.log('middle!')
+    // console.log('middle!')
     return [(cellId - width - 1), (cellId - width), (cellId - width + 1), (cellId - 1), (cellId + 1), (cellId + width - 1), (cellId + width), (cellId + width + 1)]
   }
 }
 
+//! Check neighbours
+
+
+
+
+//! End Game
+
+function endGame() {
+  alert('GAME OVER')
+}
+
+
 //! Left click
 
-function leftClick(event) {
-  if (flaggedArr[event.currentTarget.id] === true) {
+function leftClick(cellId) {
+  if (flaggedArr[cellId] === true) {
     return
-  } else if (minesArr[event.currentTarget.id] === true) {
+  } else if (minesArr[cellId] === true) {
     console.log('mine!')
     for (let index = 0; index < cellsArr.length; index++) {
       if (minesArr[index] === true) {
@@ -148,32 +161,28 @@ function leftClick(event) {
         cellsArr[index].classList.add('revealed', 'mine')
       }
     }
-    cellsArr[event.currentTarget.id].classList.remove('revealed')
-    cellsArr[event.currentTarget.id].classList.add('dead')
+    cellsArr[cellId].classList.remove('revealed')
+    cellsArr[cellId].classList.add('dead')
     // endGame()
   } else {
-    if (revealCell((parseInt(event.currentTarget.id))) === 0) {
-      event.currentTarget.classList.add('_0')
+    if ((countNeighbours(cellId)) === 0) {
+      cellsArr[cellId].classList.add('_0')
 
 
-
-      const neighbours = detectNeighbours(parseInt(event.currentTarget.id))
-      // for (let index = 0; index < neighbours.length; index++) {
-      //   console.log(neighbours)
-      // }
-      console.log(neighbours)
+      const neighbours = createNeighboursArr(cellId)
+      for (let index = 0; index < neighbours.length; index++) {
+        leftClick(neighbours[index])
+        // console.log(neighbours[index])
+        // console.log(cellsArr[neighbours[index]])
+      }
 
 
 
 
     } else {
-      event.currentTarget.classList.remove('facingDown')
-      event.currentTarget.classList.add(`_${revealCell((parseInt(event.currentTarget.id)))}`)
-      console.log(detectNeighbours(parseInt(event.currentTarget.id)))
+      cellsArr[cellId].classList.remove('facingDown')
+      cellsArr[cellId].classList.add(`_${(countNeighbours(cellId))}`)
     }
-    // console.log(event.currentTarget.id)
-    // revealCell((parseInt(event.currentTarget.id)))
-    // countNeighbours(detectNeighbours(parseInt(event.currentTarget.id)))
   }
 }
 
@@ -199,10 +208,6 @@ function middleClick(event) {
   console.log('middle click!')
 }
 
-
-function endGame() {
-  alert('GAME OVER')
-}
 
 //! Set up the game
 
