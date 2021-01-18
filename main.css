@@ -15,8 +15,10 @@ body {
 main {
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
-  background: lightgray;
+  background: silver;
+  border: 2px solid grey;
+  border-top: solid snow;
+  border-left: solid snow;
 }
 
 #header {
@@ -24,15 +26,18 @@ main {
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  border: 1px solid black;
+  border: 2px solid grey;
+  border-bottom: solid snow;
+  border-right: solid snow;
   margin: 5px 5px 0px 5px;
   padding: 10px;
 }
 
 .headerelement {
-  border: 1px solid black;
   padding: 2px;
   margin: 0;
+  height: 30px;
+  width: 30px;
 }
 
 #grid {
@@ -42,6 +47,11 @@ main {
   margin: 5px;
 }
 
+
+.smiley {
+  background: url('./images/smiley.png') no-repeat;
+  background-size: contain;
+}
 
 .facingDown {
   background: url('./images/facingDown.png') no-repeat;

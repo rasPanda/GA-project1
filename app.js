@@ -3,6 +3,9 @@
 const setupGrid = document.getElementById('grid')
 // const gameGrid = Array.from(document.getElementById('grid'))
 // console.log(gameGrid)
+const smileyButton = document.getElementById('smiley')
+const minesCounter = document.getElementById('minesleft')
+const clock = document.getElementById('clock')
 
 //! Variables
 
@@ -10,12 +13,15 @@ let width = 9
 let height = 9
 let minesToSet = 10
 let minesLeft = 10
+let timerInt = 0
+let leftButton = false
 
 //! Arrays
 
 const cellsArr = []
 const minesArr = []
 const flaggedArr = []
+const clearedArr = []
 
 console.log(cellsArr)
 console.log(minesArr)
@@ -24,6 +30,22 @@ console.log(flaggedArr)
 
 
 //! Functions
+
+//! Set up the game
+
+function setUpGame() {
+  createGrid()
+  setMines()
+  createFlaggedArr()
+  createClearedArr()
+  createEventListeners()
+}
+
+
+setTimeout(() => {
+  setUpGame()
+}, 1)
+
 
 function createGrid() {
   for (let index = 0; index < width * height; index++) {
@@ -68,21 +90,37 @@ function createFlaggedArr() {
   }
 }
 
+function createClearedArr() {
+  for (let index = 0; index < cellsArr.length; index++) {
+    clearedArr.push(false)
+  }
+}
 
 function createEventListeners() {
   cellsArr.forEach((cell) => {
-    cell.addEventListener('click', (event) => {
+    cell.addEventListener('mousedown', (event) => {
+      mouseDown((parseInt(event.currentTarget.id)))
+      leftButton = true
+    })
+  })
+  cellsArr.forEach((cell) => {
+    cell.addEventListener('mouseup', (event) => {
+      leftButton = false
       leftClick((parseInt(event.currentTarget.id)))
     })
   })
   cellsArr.forEach((cell) => {
     cell.addEventListener('contextmenu', (event) => {
       event.preventDefault()
-      rightClick(event)
+      if (leftButton = false) {
+        rightClick(event)
+      } else {
+        middleClick(event)
+      }
     })
   })
   // cellsArr.forEach((cell) => {
-  //   cell.addEventListener('mousedown contextmenu', (event) => {
+  //   cell.addEventListener('mousedown', (event) => {
   //     event.preventDefault()
   //     middleClick(event)
   //     console.log(event)
@@ -91,8 +129,19 @@ function createEventListeners() {
 }
 
 
-function countNeighbours(cellId) {
-  const neighbourArr = createNeighboursArr(cellId)
+//! Clock
+
+
+// if (timerInt) return
+// timerInt = setInterval(() => {
+//   clock.innerHTML += 1
+// }, 1000)
+
+
+//! Check neighbours
+
+
+function countNeighbours(neighbourArr) {
   const numOfMinesArr = []
   for (let index = 0; index < neighbourArr.length; index++) {
     numOfMinesArr.push(minesArr[neighbourArr[index]])
@@ -100,43 +149,28 @@ function countNeighbours(cellId) {
   return numOfMinesArr.filter(x => x).length
 }
 
-// function countNeighbours (neighbourArr) {
-//   // const neighbours = []
-//   console.log(neighbourArr) 
-// }
 
 function createNeighboursArr(cellId) {
   if (cellId === 0) {
-    // console.log('top left!')
     return [1, parseInt(width), (width + 1)]
   } else if (cellId === width - 1) {
-    // console.log('top right!')
     return [(width - 2), (width * 2 - 2), (width * 2 - 1)]
   } else if (cellId === width * height - 1) {
-    // console.log('bottom right!')
     return [(width * height - 2), (width * height - width - 2), (width * height - width - 1)]
   } else if (cellId === width * height - width) {
-    // console.log('bottom left!')
     return [(width * height - width + 1), (width * height - width * 2), (width * height - width * 2 + 1)]
   } else if (cellId < width) {
-    // console.log('top row!')
     return [(cellId - 1), (cellId + 1), (cellId + width - 1), (cellId + width), (cellId + width + 1)]
   } else if (cellId % width === 0) {
-    // console.log('left row!')
     return [(cellId - width), (cellId - width + 1), (cellId + 1), (cellId + width), (cellId + width + 1)]
   } else if ((cellId + width) >= width * height) {
-    // console.log('bottom row!')
     return [(cellId - width - 1), (cellId - width), (cellId - width + 1), (cellId - 1), (cellId + 1)]
   } else if (cellId % width === width - 1) {
-    // console.log('right row!')
     return [(cellId - width - 1), (cellId - width), (cellId - 1), (cellId + width - 1), (cellId + width)]
   } else {
-    // console.log('middle!')
     return [(cellId - width - 1), (cellId - width), (cellId - width + 1), (cellId - 1), (cellId + 1), (cellId + width - 1), (cellId + width), (cellId + width + 1)]
   }
 }
-
-//! Check neighbours
 
 
 
@@ -150,11 +184,26 @@ function endGame() {
 
 //! Left click
 
+function mouseDown(cellId) {
+  const neighbours = createNeighboursArr(cellId)
+  cellsArr[cellId].classList.remove('facingDown')
+  cellsArr[cellId].classList.add('_0')
+  // for (let index = 0; index < neighbours.length; index++) {
+  //   cellsArr[neighbours[index]].classList.remove('facingDown')
+  //   cellsArr[neighbours[index]].classList.add('_0')
+  // }
+}
+
 function leftClick(cellId) {
+  const neighbours = createNeighboursArr(cellId)
+  const numOfMinesInNeighbours = countNeighbours(neighbours)
+  // for (let index = 0; index < neighbours.length; index++) {
+  //   cellsArr[neighbours[index]].classList.remove('_0')
+  //   cellsArr[neighbours[index]].classList.add('facingDown')
+  // }
   if (flaggedArr[cellId] === true) {
     return
   } else if (minesArr[cellId] === true) {
-    console.log('mine!')
     for (let index = 0; index < cellsArr.length; index++) {
       if (minesArr[index] === true) {
         cellsArr[index].classList.remove('facingDown')
@@ -163,28 +212,22 @@ function leftClick(cellId) {
     }
     cellsArr[cellId].classList.remove('revealed')
     cellsArr[cellId].classList.add('dead')
-    // endGame()
-  } else {
-    if ((countNeighbours(cellId)) === 0) {
+    endGame()
+  } else if (numOfMinesInNeighbours === 0) {
+    if (clearedArr[cellId] === false) {
       cellsArr[cellId].classList.add('_0')
-
-
-      const neighbours = createNeighboursArr(cellId)
+      clearedArr[cellId] = true
       for (let index = 0; index < neighbours.length; index++) {
         leftClick(neighbours[index])
-        // console.log(neighbours[index])
-        // console.log(cellsArr[neighbours[index]])
       }
-
-
-
-
-    } else {
-      cellsArr[cellId].classList.remove('facingDown')
-      cellsArr[cellId].classList.add(`_${(countNeighbours(cellId))}`)
     }
+  } else {
+    cellsArr[cellId].classList.remove('facingDown')
+    cellsArr[cellId].classList.add(`_${numOfMinesInNeighbours}`)
+    clearedArr[cellId] = true
   }
 }
+
 
 //! Right click
 
@@ -209,11 +252,3 @@ function middleClick(event) {
 }
 
 
-//! Set up the game
-
-setTimeout(() => {
-  createGrid()
-  setMines()
-  createFlaggedArr()
-  createEventListeners()
-}, 1)
