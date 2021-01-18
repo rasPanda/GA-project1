@@ -15,6 +15,7 @@ let minesToSet = 10
 let minesLeft = 10
 let timerInt = 0
 let leftButton = false
+let rightButton = false
 
 //! Arrays
 
@@ -99,33 +100,99 @@ function createClearedArr() {
 function createEventListeners() {
   cellsArr.forEach((cell) => {
     cell.addEventListener('mousedown', (event) => {
-      mouseDown((parseInt(event.currentTarget.id)))
-      leftButton = true
+      //? If cell is not revealed
+      if (clearedArr[(parseInt(event.currentTarget.id))] === false) {
+        //? If cell is flagged
+        if (flaggedArr[(parseInt(event.currentTarget.id))] === true && event.button === 0) {
+          return
+        } else if (flaggedArr[(parseInt(event.currentTarget.id))] === true && event.button === 2) {
+          flagCell((parseInt(event.currentTarget.id)))
+          //? If cell is not flagged
+        } else if (event.button === 0 && rightButton === false) {
+          leftButton = true
+          mouseDownCovered((parseInt(event.currentTarget.id)))
+        } else if (event.button === 2 && leftButton === false) {
+          rightButton = true
+          flagCell((parseInt(event.currentTarget.id)))
+        } else if (event.button === 2 && leftButton === true) {
+          rightButton = true
+          mouseDownDoubleCovered((parseInt(event.currentTarget.id)))
+        }
+        //? If cell is revealed
+      } else if (clearedArr[(parseInt(event.currentTarget.id))] === true) {
+
+
+        if (event.button === 0 && rightButton === false) {
+          leftButton = true
+        } else if (event.button === 2 && leftButton === false) {
+          rightButton = true
+        } else if ((event.button === 2 && leftButton === true) || (event.button === 0 && rightButton === true)) {
+          leftButton = true
+          rightButton = true
+          mouseDownDoubleRevealed((parseInt(event.currentTarget.id)))
+        }
+      }
     })
   })
   cellsArr.forEach((cell) => {
     cell.addEventListener('mouseup', (event) => {
-      leftButton = false
-      leftClick((parseInt(event.currentTarget.id)))
+      //? If cell is not revealed
+      if (clearedArr[(parseInt(event.currentTarget.id))] === false) {
+        if (event.button === 0 && leftButton === true && rightButton === true) {
+          leftButton = false
+          rightButton = false
+          mouseUpCovered((parseInt(event.currentTarget.id)))
+          mouseUpDoubleCovered((parseInt(event.currentTarget.id)))
+        } else if (event.button === 2 && leftButton === true && rightButton === true) {
+          leftButton = false
+          rightButton = false
+          mouseUpCovered((parseInt(event.currentTarget.id)))
+          mouseUpDoubleCovered((parseInt(event.currentTarget.id)))
+        } else if (event.button === 2) {
+          rightButton = false
+        } else if (event.button === 0 && leftButton !== false) {
+          leftButton = false
+          revealCell((parseInt(event.currentTarget.id)))
+        }
+        //? If cell is revealed
+      } else if (clearedArr[(parseInt(event.currentTarget.id))] === true) {
+        if (leftButton === true && rightButton === true) {
+          leftButton = false
+          rightButton = false
+          mouseUpDoubleRevealed((parseInt(event.currentTarget.id)))
+
+          //? If cell cell is flagged incorrectly
+          const neighbours = createNeighboursArr((parseInt(event.currentTarget.id)))
+          console.log(neighbours)
+          const neighboursFlagged = []
+          for (let index = 0; index < neighbours.length; index++) {
+            neighboursFlagged = 
+            
+          }
+
+          for (let index = 0; index < neighbours.length; index++) {
+            if (minesArr[neighbours[index]] !== flaggedArr[neighbours[index]]) {
+              console.log('wrong flag')
+              // cellsArr[neighbours[index]].classList.remove('flagged')
+              // endGame((parseInt(event.currentTarget.id)))
+            } else {
+              console.log('check cells')
+              // revealCell(neighbours[index])
+            }
+          }
+        } else if (event.button === 0) {
+          leftButton = false
+        } else if (event.button === 2) {
+          rightButton = false
+        }
+      }
     })
   })
   cellsArr.forEach((cell) => {
     cell.addEventListener('contextmenu', (event) => {
       event.preventDefault()
-      if (leftButton = false) {
-        rightClick(event)
-      } else {
-        middleClick(event)
-      }
     })
   })
-  // cellsArr.forEach((cell) => {
-  //   cell.addEventListener('mousedown', (event) => {
-  //     event.preventDefault()
-  //     middleClick(event)
-  //     console.log(event)
-  //   })
-  // })
 }
 
 
@@ -177,78 +244,121 @@ function createNeighboursArr(cellId) {
 
 //! End Game
 
-function endGame() {
-  alert('GAME OVER')
+function endGame(cellId) {
+  for (let index = 0; index < cellsArr.length; index++) {
+    if (minesArr[index] === true) {
+      cellsArr[index].classList.remove('facingDown')
+      cellsArr[index].classList.add('revealed', 'mine')
+    }
+  }
+  console.log(cellId)
+  cellsArr[cellId].classList.remove('revealed', '_0')
+  cellsArr[cellId].classList.add('dead')
 }
 
 
-//! Left click
+//! Mouse up/down
 
-function mouseDown(cellId) {
-  const neighbours = createNeighboursArr(cellId)
+function mouseDownCovered(cellId) {
   cellsArr[cellId].classList.remove('facingDown')
   cellsArr[cellId].classList.add('_0')
-  // for (let index = 0; index < neighbours.length; index++) {
-  //   cellsArr[neighbours[index]].classList.remove('facingDown')
-  //   cellsArr[neighbours[index]].classList.add('_0')
-  // }
 }
 
-function leftClick(cellId) {
+function mouseUpCovered(cellId) {
+  cellsArr[cellId].classList.remove('_0')
+  cellsArr[cellId].classList.add('facingDown')
+}
+
+function mouseDownDoubleCovered(cellId) {
+  const neighbours = createNeighboursArr(cellId)
+  for (let index = 0; index < neighbours.length; index++) {
+    cellsArr[neighbours[index]].classList.add('_0')
+  }
+}
+
+function mouseUpDoubleCovered(cellId) {
+  const neighbours = createNeighboursArr(cellId)
+  for (let index = 0; index < neighbours.length; index++) {
+    cellsArr[neighbours[index]].classList.remove('_0')
+    cellsArr[neighbours[index]].classList.add('facingDown')
+  }
+}
+
+function mouseDownDoubleRevealed(cellId) {
+  const neighbours = createNeighboursArr(cellId)
+  for (let index = 0; index < neighbours.length; index++) {
+    if (clearedArr[neighbours[index]] === false) {
+      if (flaggedArr[neighbours[index]] === false) {
+        cellsArr[neighbours[index]].classList.remove('facingDown')
+        cellsArr[neighbours[index]].classList.add('_0')
+      }
+    }
+  }
+}
+
+function mouseUpDoubleRevealed(cellId) {
+  const neighbours = createNeighboursArr(cellId)
+  for (let index = 0; index < neighbours.length; index++) {
+    if (clearedArr[neighbours[index]] === false) {
+      cellsArr[neighbours[index]].classList.remove('_0')
+      cellsArr[neighbours[index]].classList.add('facingDown')
+    }
+  }
+}
+
+//! Reveal the covered cell (direct click)
+
+function revealCell(cellId) {
   const neighbours = createNeighboursArr(cellId)
   const numOfMinesInNeighbours = countNeighbours(neighbours)
-  // for (let index = 0; index < neighbours.length; index++) {
-  //   cellsArr[neighbours[index]].classList.remove('_0')
-  //   cellsArr[neighbours[index]].classList.add('facingDown')
-  // }
-  if (flaggedArr[cellId] === true) {
+  if (clearedArr[cellId] === true) {
     return
-  } else if (minesArr[cellId] === true) {
-    for (let index = 0; index < cellsArr.length; index++) {
-      if (minesArr[index] === true) {
-        cellsArr[index].classList.remove('facingDown')
-        cellsArr[index].classList.add('revealed', 'mine')
+  } else {
+    if (flaggedArr[cellId] === true) {
+      return
+    } else if (minesArr[cellId] === true) {
+      endGame(cellId)
+    } else if (numOfMinesInNeighbours === 0) {
+      if (clearedArr[cellId] === false) {
+        cellsArr[cellId].classList.add('_0')
+        clearedArr[cellId] = true
+        for (let index = 0; index < neighbours.length; index++) {
+          revealCell(neighbours[index])
+        }
       }
-    }
-    cellsArr[cellId].classList.remove('revealed')
-    cellsArr[cellId].classList.add('dead')
-    endGame()
-  } else if (numOfMinesInNeighbours === 0) {
-    if (clearedArr[cellId] === false) {
-      cellsArr[cellId].classList.add('_0')
+    } else {
+      cellsArr[cellId].classList.remove('facingDown')
+      cellsArr[cellId].classList.add(`_${numOfMinesInNeighbours}`)
       clearedArr[cellId] = true
-      for (let index = 0; index < neighbours.length; index++) {
-        leftClick(neighbours[index])
-      }
     }
-  } else {
+  }
+}
+
+
+//! Flag the cell
+
+function flagCell(cellId) {
+  if (clearedArr[cellId] === true) {
+    return
+  } else if (flaggedArr[cellId] === false) {
     cellsArr[cellId].classList.remove('facingDown')
-    cellsArr[cellId].classList.add(`_${numOfMinesInNeighbours}`)
-    clearedArr[cellId] = true
-  }
-}
-
-
-//! Right click
-
-function rightClick(event) {
-  if (flaggedArr[event.currentTarget.id] === false) {
-    event.preventDefault()
-    event.currentTarget.classList.remove('facingDown')
-    event.currentTarget.classList.add('flagged')
-    flaggedArr[event.currentTarget.id] = true
+    cellsArr[cellId].classList.add('flagged')
+    flaggedArr[cellId] = true
   } else {
-    event.preventDefault()
-    event.currentTarget.classList.remove('flagged')
-    event.currentTarget.classList.add('facingDown')
-    flaggedArr[event.currentTarget.id] = false
+    cellsArr[cellId].classList.remove('flagged')
+    cellsArr[cellId].classList.add('facingDown')
+    flaggedArr[cellId] = false
   }
 }
 
-//! Middle click
+//! Reveal the covered neighbours
 
-function middleClick(event) {
-  console.log('middle click!')
+function revealCoveredNeighbours(cellId) {
+  if (clearedArr[cellId] === true) {
+    return
+  } else {
+    console.log('working on it!')
+  }
 }
 
 
