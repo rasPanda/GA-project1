@@ -19,10 +19,10 @@ let rightButton = false
 
 //! Arrays
 
-const cellsArr = []
-const minesArr = []
-const flaggedArr = []
-const clearedArr = []
+let cellsArr = []
+let minesArr = []
+let flaggedArr = []
+let clearedArr = []
 
 console.log(cellsArr)
 console.log(minesArr)
@@ -82,6 +82,8 @@ function setMines() {
     minesArr.push(false)
   }
   minesArr.sort(() => 0.5 - Math.random())
+  minesLeft = 10
+  minesCounter.innerHTML = minesLeft
 }
 
 
@@ -118,10 +120,10 @@ function createEventListeners() {
           rightButton = true
           mouseDownDoubleCovered((parseInt(event.currentTarget.id)))
         }
+        smileyButton.classList.remove('smiley')
+        smileyButton.classList.add('smileyooh')
         //? If cell is revealed
       } else if (clearedArr[(parseInt(event.currentTarget.id))] === true) {
-
-
         if (event.button === 0 && rightButton === false) {
           leftButton = true
         } else if (event.button === 2 && leftButton === false) {
@@ -131,6 +133,10 @@ function createEventListeners() {
           rightButton = true
           mouseDownDoubleRevealed((parseInt(event.currentTarget.id)))
         }
+
+        //! Smiley
+        smileyButton.classList.remove('smiley')
+        smileyButton.classList.add('smileyooh')
       }
     })
   })
@@ -154,6 +160,12 @@ function createEventListeners() {
           leftButton = false
           revealCell((parseInt(event.currentTarget.id)))
         }
+
+        //! Smiley
+        smileyButton.classList.remove('smileyooh')
+        smileyButton.classList.add('smiley')
+
+
         //? If cell is revealed
       } else if (clearedArr[(parseInt(event.currentTarget.id))] === true) {
         if (leftButton === true && rightButton === true) {
@@ -161,23 +173,42 @@ function createEventListeners() {
           rightButton = false
           mouseUpDoubleRevealed((parseInt(event.currentTarget.id)))
 
-          //? If cell cell is flagged incorrectly
+          //? If cell is flagged incorrectly
           const neighbours = createNeighboursArr((parseInt(event.currentTarget.id)))
-          console.log(neighbours)
-          const neighboursFlagged = []
+          const uncoveredNeighbours = []
           for (let index = 0; index < neighbours.length; index++) {
-            neighboursFlagged = 
-            
+            if (clearedArr[neighbours[index]] === false) {
+              uncoveredNeighbours.push(neighbours[index])
+            }
           }
+          // console.log(neighbours)
+          // const neighboursFlagged = []
+          // for (let index = 0; index < neighbours.length; index++) {
+          //   neighboursFlagged = 
 
-          for (let index = 0; index < neighbours.length; index++) {
-            if (minesArr[neighbours[index]] !== flaggedArr[neighbours[index]]) {
-              console.log('wrong flag')
-              // cellsArr[neighbours[index]].classList.remove('flagged')
-              // endGame((parseInt(event.currentTarget.id)))
+          // }
+
+          for (let index = 0; index < uncoveredNeighbours.length; index++) {
+            if (flaggedArr[uncoveredNeighbours[index]] === true && (flaggedArr[uncoveredNeighbours[index]] !== minesArr[uncoveredNeighbours[index]])) {
+              const wrongCells = []
+              console.log('wrong flag!')
+              console.log(uncoveredNeighbours)
+              // console.log(minesArr[neighbours[index]])
+              // console.log(flaggedArr[neighbours[index]])
+              // console.log(neighbours[index])
+              // wrongCells.push(neighbours[index])
+              // // cellsArr[neighbours[index]].classList.remove('flagged')
+              // // cellsArr[neighbours[index]].classList.add('bombwrong')
+              // endGameRevealed(wrongCells)
+            } else if (flaggedArr[uncoveredNeighbours[index]] === true && (flaggedArr[uncoveredNeighbours[index]] === minesArr[uncoveredNeighbours[index]])) {
+              // console.log('doing nothing, correct flags!')
+              return
+            } else if (minesArr[uncoveredNeighbours[index]] === true) {
+              // console.log('mines nearby!')
+              return
             } else {
-              console.log('check cells')
-              // revealCell(neighbours[index])
+              // console.log('no mines!')
+              revealCell(uncoveredNeighbours[index])
             }
           }
         } else if (event.button === 0) {
@@ -185,7 +216,25 @@ function createEventListeners() {
         } else if (event.button === 2) {
           rightButton = false
         }
+
+        //! Smiley
+        smileyButton.classList.remove('smileyooh')
+        smileyButton.classList.add('smiley')
+
+        //! Win condition
+        // if () {
+
+        // }
       }
+
+      //! Clock
+      if (timerInt) {
+        return
+      } else
+        clock.innerHTML = 1
+      timerInt = setInterval(() => {
+        clock.innerHTML++
+      }, 1000)
     })
   })
   cellsArr.forEach((cell) => {
@@ -196,13 +245,7 @@ function createEventListeners() {
 }
 
 
-//! Clock
 
-
-// if (timerInt) return
-// timerInt = setInterval(() => {
-//   clock.innerHTML += 1
-// }, 1000)
 
 
 //! Check neighbours
@@ -240,22 +283,55 @@ function createNeighboursArr(cellId) {
 }
 
 
-
-
 //! End Game
 
 function endGame(cellId) {
   for (let index = 0; index < cellsArr.length; index++) {
-    if (minesArr[index] === true) {
+    if (minesArr[index] === true && flaggedArr[index] === false) {
       cellsArr[index].classList.remove('facingDown')
       cellsArr[index].classList.add('revealed', 'mine')
     }
   }
-  console.log(cellId)
   cellsArr[cellId].classList.remove('revealed', '_0')
-  cellsArr[cellId].classList.add('dead')
+  cellsArr[cellId].classList.add('minedead')
+  for (let index = 0; index < flaggedArr.length; index++) {
+    if (flaggedArr[index] === true && (flaggedArr[index] !== minesArr[index])) {
+      cellsArr[index].classList.remove('flagged')
+      cellsArr[index].classList.add('minewrong')
+    }
+  }
+  clearInterval(timerInt)
+  smileyButton.classList.remove('smiley')
+  smileyButton.classList.add('smileydead')
 }
 
+
+function winGame() {
+
+}
+
+//! Smiley Button + Reset game
+
+smileyButton.addEventListener('mousedown', (event) => {
+  smileyButton.classList.remove('smiley', 'smileydead')
+  smileyButton.classList.add('smileydown')
+})
+
+smileyButton.addEventListener('mouseup', (event) => {
+  smileyButton.classList.remove('smileydown')
+  smileyButton.classList.add('smiley')
+  clearInterval(timerInt)
+  timerInt = 0
+  clock.innerHTML = 0
+  while (setupGrid.hasChildNodes()) {
+    setupGrid.removeChild(setupGrid.lastChild)
+  }
+  cellsArr = []
+  minesArr = []
+  flaggedArr = []
+  clearedArr = []
+  setUpGame()
+})
 
 //! Mouse up/down
 
@@ -344,10 +420,14 @@ function flagCell(cellId) {
     cellsArr[cellId].classList.remove('facingDown')
     cellsArr[cellId].classList.add('flagged')
     flaggedArr[cellId] = true
+    minesLeft--
+    minesCounter.innerHTML = minesLeft
   } else {
     cellsArr[cellId].classList.remove('flagged')
     cellsArr[cellId].classList.add('facingDown')
     flaggedArr[cellId] = false
+    minesLeft++
+    minesCounter.innerHTML = minesLeft
   }
 }
 

@@ -47,9 +47,23 @@ main {
   margin: 5px;
 }
 
+.smileyooh {
+  background: url('./images/smiley-ooh.png') no-repeat;
+  background-size: contain;
+}
 
 .smiley {
   background: url('./images/smiley.png') no-repeat;
+  background-size: contain;
+}
+
+.smileydown {
+  background: url('./images/smiley-down.png') no-repeat;
+  background-size: contain;
+}
+
+.smileydead {
+  background: url('./images/smiley-dead.png') no-repeat;
   background-size: contain;
 }
 
@@ -61,22 +75,6 @@ main {
 .revealed {
   background: url('./images/0.png') no-repeat;
   background-size: contain;
-}
-
-.flagged {
-  background: url('./images/flagged.png') no-repeat;
-  background-size: contain;
-}
-
-.mine {
-  background: url('./images/0.png') no-repeat;
-  background-size: contain;
-  content: url('./images/bomb.png');
-  position: relative;
-}
-
-.dead {
-  background: red;
 }
 
 ._0 {
@@ -121,5 +119,31 @@ main {
 
 ._8 {
   background: url('./images/8.png') no-repeat;
+  background-size: contain;
+}
+
+.mine {
+  background: url('./images/0.png') no-repeat;
+  background-size: contain;
+  content: url('./images/bomb.png');
+  position: relative;
+}
+
+.minedead {
+  background: red;
+  background-size: contain;
+  content: url('./images/bomb.png');
+  position: relative;
+}
+
+.minewrong {
+  background: url('./images/0.png') no-repeat;
+  background-size: contain;
+  content: url('./images/bomb-wrong.png');
+  position: relative;
+}
+
+.flagged {
+  background: url('./images/flagged.png') no-repeat;
   background-size: contain;
 }
