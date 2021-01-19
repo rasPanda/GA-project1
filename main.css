@@ -1,6 +1,6 @@
 * {
   box-sizing: border-box;
-  font-size: 10px;
+  font-size: 8px;
 }
 
 body {
@@ -64,6 +64,11 @@ main {
 
 .smileydead {
   background: url('./images/smiley-dead.png') no-repeat;
+  background-size: contain;
+}
+
+.smileywin {
+  background: url('./images/smiley-win.png') no-repeat;
   background-size: contain;
 }
 

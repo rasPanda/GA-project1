@@ -113,30 +113,32 @@ function createEventListeners() {
         } else if (event.button === 0 && rightButton === false) {
           leftButton = true
           mouseDownCovered((parseInt(event.currentTarget.id)))
+          smileyButton.classList.remove('smiley')
+          smileyButton.classList.add('smileyooh')
         } else if (event.button === 2 && leftButton === false) {
           rightButton = true
           flagCell((parseInt(event.currentTarget.id)))
         } else if (event.button === 2 && leftButton === true) {
           rightButton = true
           mouseDownDoubleCovered((parseInt(event.currentTarget.id)))
+          smileyButton.classList.remove('smiley')
+          smileyButton.classList.add('smileyooh')
         }
-        smileyButton.classList.remove('smiley')
-        smileyButton.classList.add('smileyooh')
         //? If cell is revealed
       } else if (clearedArr[(parseInt(event.currentTarget.id))] === true) {
         if (event.button === 0 && rightButton === false) {
           leftButton = true
+          smileyButton.classList.remove('smiley')
+          smileyButton.classList.add('smileyooh')
         } else if (event.button === 2 && leftButton === false) {
           rightButton = true
         } else if ((event.button === 2 && leftButton === true) || (event.button === 0 && rightButton === true)) {
           leftButton = true
           rightButton = true
           mouseDownDoubleRevealed((parseInt(event.currentTarget.id)))
+          smileyButton.classList.remove('smiley')
+          smileyButton.classList.add('smileyooh')
         }
-
-        //! Smiley
-        smileyButton.classList.remove('smiley')
-        smileyButton.classList.add('smileyooh')
       }
     })
   })
@@ -149,21 +151,25 @@ function createEventListeners() {
           rightButton = false
           mouseUpCovered((parseInt(event.currentTarget.id)))
           mouseUpDoubleCovered((parseInt(event.currentTarget.id)))
+          smileyButton.classList.remove('smileyooh')
+          smileyButton.classList.add('smiley')
         } else if (event.button === 2 && leftButton === true && rightButton === true) {
           leftButton = false
           rightButton = false
           mouseUpCovered((parseInt(event.currentTarget.id)))
           mouseUpDoubleCovered((parseInt(event.currentTarget.id)))
+          smileyButton.classList.remove('smileyooh')
+          smileyButton.classList.add('smiley')
         } else if (event.button === 2) {
           rightButton = false
         } else if (event.button === 0 && leftButton !== false) {
           leftButton = false
           revealCell((parseInt(event.currentTarget.id)))
+          smileyButton.classList.remove('smileyooh')
+          smileyButton.classList.add('smiley')
         }
 
-        //! Smiley
-        smileyButton.classList.remove('smileyooh')
-        smileyButton.classList.add('smiley')
+
 
 
         //? If cell is revealed
@@ -172,43 +178,65 @@ function createEventListeners() {
           leftButton = false
           rightButton = false
           mouseUpDoubleRevealed((parseInt(event.currentTarget.id)))
+          smileyButton.classList.remove('smileyooh')
+          smileyButton.classList.add('smiley')
 
-          //? If cell is flagged incorrectly
+          //? Create array of neighbours which are covered
           const neighbours = createNeighboursArr((parseInt(event.currentTarget.id)))
-          const uncoveredNeighbours = []
+          const coveredNeighbours = []
           for (let index = 0; index < neighbours.length; index++) {
             if (clearedArr[neighbours[index]] === false) {
-              uncoveredNeighbours.push(neighbours[index])
+              coveredNeighbours.push(neighbours[index])
             }
           }
-          // console.log(neighbours)
-          // const neighboursFlagged = []
-          // for (let index = 0; index < neighbours.length; index++) {
-          //   neighboursFlagged = 
 
-          // }
+          //? create array of neighbours w/wo mines + arrays of neighbours w/wo flags
+          const coveredNeighboursWithMines = []
+          const coveredNeighboursNoMines = []
+          const coveredNeighboursWithFlags = []
+          // const coveredNeighboursNoFlags = []
+          const coveredNeighboursWithMinesAndFlags = []
+          // const coveredNeighboursNoMinesAndFlags = []
 
-          for (let index = 0; index < uncoveredNeighbours.length; index++) {
-            if (flaggedArr[uncoveredNeighbours[index]] === true && (flaggedArr[uncoveredNeighbours[index]] !== minesArr[uncoveredNeighbours[index]])) {
-              const wrongCells = []
-              console.log('wrong flag!')
-              console.log(uncoveredNeighbours)
-              // console.log(minesArr[neighbours[index]])
-              // console.log(flaggedArr[neighbours[index]])
-              // console.log(neighbours[index])
-              // wrongCells.push(neighbours[index])
-              // // cellsArr[neighbours[index]].classList.remove('flagged')
-              // // cellsArr[neighbours[index]].classList.add('bombwrong')
-              // endGameRevealed(wrongCells)
-            } else if (flaggedArr[uncoveredNeighbours[index]] === true && (flaggedArr[uncoveredNeighbours[index]] === minesArr[uncoveredNeighbours[index]])) {
-              // console.log('doing nothing, correct flags!')
-              return
-            } else if (minesArr[uncoveredNeighbours[index]] === true) {
-              // console.log('mines nearby!')
-              return
-            } else {
-              // console.log('no mines!')
-              revealCell(uncoveredNeighbours[index])
+          for (let index = 0; index < coveredNeighbours.length; index++) {
+            if (minesArr[coveredNeighbours[index]] === true) {
+              coveredNeighboursWithMines.push(coveredNeighbours[index])
+            }
+            if (minesArr[coveredNeighbours[index]] === false) {
+              coveredNeighboursNoMines.push(coveredNeighbours[index])
+            }
+            if (flaggedArr[coveredNeighbours[index]] === true) {
+              coveredNeighboursWithFlags.push(coveredNeighbours[index])
+            }
+            // if (flaggedArr[coveredNeighbours[index]] === false) {
+            //   coveredNeighboursNoFlags.push(coveredNeighbours[index])
+            // }
+            if (flaggedArr[coveredNeighbours[index]] === true && minesArr[coveredNeighbours[index]] === true) {
+              coveredNeighboursWithMinesAndFlags.push(coveredNeighbours[index])
+            }
+            // if (flaggedArr[coveredNeighbours[index]] === false && minesArr[coveredNeighbours[index]] === false) {
+            //   coveredNeighboursNoMinesAndFlags.push(coveredNeighbours[index])
+            // }
+          }
+
+          // console.log(`covered neighour arr: ${coveredNeighbours}`)
+          // console.log(`coveredNeighboursWithMines ${coveredNeighboursWithMines}`)
+          // console.log(`coveredNeighboursNoMines ${coveredNeighboursNoMines}`)
+          // console.log(`coveredNeighboursWithFlags ${coveredNeighboursWithFlags}`)
+          // console.log(`coveredNeighboursNoFlags ${coveredNeighboursNoFlags}`)
+          // console.log(`coveredNeighboursWithMinesAndFlags ${coveredNeighboursWithMinesAndFlags}`)
+          // console.log(`coveredNeighboursNoMinesAndFlags ${coveredNeighboursNoMinesAndFlags}`)
+
+          //? Check if there are any wrong flags. If yes, end game.
+          if (coveredNeighboursWithMines.length > 0 && coveredNeighboursWithFlags.length > 0 && coveredNeighboursWithMinesAndFlags.toString() !== coveredNeighboursWithFlags.toString()) {
+            for (let index = 0; index < coveredNeighboursWithMines.length; index++) {
+              cellsArr[coveredNeighboursWithMines[index]].classList.add('minedead')
+            }
+            endGame(coveredNeighboursWithFlags[0])
+            //? If all flags are correct, and there are no mines in the covered neighbours, reveal neighbours.
+          } else if (coveredNeighboursNoMines.length > 0 && coveredNeighboursWithMinesAndFlags.toString() === coveredNeighboursWithMines.toString() && coveredNeighboursWithMinesAndFlags.toString() === coveredNeighboursWithFlags.toString()) {
+            for (let index = 0; index < coveredNeighboursNoMines.length; index++) {
+              revealCell(coveredNeighboursNoMines[index])
             }
           }
         } else if (event.button === 0) {
@@ -216,15 +244,19 @@ function createEventListeners() {
         } else if (event.button === 2) {
           rightButton = false
         }
-
+        console.log(clearedArr)
         //! Smiley
         smileyButton.classList.remove('smileyooh')
         smileyButton.classList.add('smiley')
 
         //! Win condition
-        // if () {
-
-        // }
+        if (minesLeft === 0) {
+          if (winGame() === true) {
+            console.log('win!')
+            smileyButton.classList.remove('smiley')
+            smileyButton.classList.add('smileywin')
+          }
+        }
       }
 
       //! Clock
@@ -243,8 +275,6 @@ function createEventListeners() {
     })
   })
 }
-
-
 
 
 
@@ -303,17 +333,21 @@ function endGame(cellId) {
   clearInterval(timerInt)
   smileyButton.classList.remove('smiley')
   smileyButton.classList.add('smileydead')
+  cellsArr = []
 }
 
 
 function winGame() {
-
+  for (let index = 0; index < minesArr.length; index++) {
+    if (minesArr[index] !== flaggedArr[index]) return false
+  }
+  return true
 }
 
 //! Smiley Button + Reset game
 
 smileyButton.addEventListener('mousedown', (event) => {
-  smileyButton.classList.remove('smiley', 'smileydead')
+  smileyButton.classList.remove('smiley', 'smileydead', 'smileywin')
   smileyButton.classList.add('smileydown')
 })
 
@@ -428,16 +462,6 @@ function flagCell(cellId) {
     flaggedArr[cellId] = false
     minesLeft++
     minesCounter.innerHTML = minesLeft
-  }
-}
-
-//! Reveal the covered neighbours
-
-function revealCoveredNeighbours(cellId) {
-  if (clearedArr[cellId] === true) {
-    return
-  } else {
-    console.log('working on it!')
   }
 }
 
