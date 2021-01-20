@@ -390,7 +390,7 @@ function resetGame() {
   clearInterval(timerInt)
   timerInt = 0
   clockDisplay = 0
-  minesLeft = 10
+  minesLeft = minesToSet
   while (setupGrid.hasChildNodes()) {
     setupGrid.removeChild(setupGrid.lastChild)
   }
