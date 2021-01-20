@@ -1,6 +1,10 @@
 * {
   box-sizing: border-box;
-  font-size: 8px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font-family:Arial, Helvetica, sans-serif
 }
 
 body {
@@ -10,6 +14,10 @@ body {
   align-items: center;
   flex-direction: column;
   margin: 0;
+}
+
+li {
+  font-size: 12px;
 }
 
 #container {
@@ -24,17 +32,20 @@ main {
   border: 3px solid grey;
   border-top: solid snow;
   border-left: solid snow;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 #options {
   display: flex;
   flex-direction: column;
   position: relative;
-  margin: 10px 5px;
+  margin: 5px 5px;
+}
+
+#optionscontainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #difficulty {
@@ -48,6 +59,28 @@ main {
   font-size: 10px;
   width: 80px;
   cursor: pointer;
+}
+
+#howtoplay {
+  font-size: 10px;
+  width: 80px;
+  cursor: pointer;
+  align-self: flex-end;
+  margin: 5px 5px;
+}
+
+#howtodiv {
+  font-size: 8px;
+  width: 80px;
+  position: absolute;
+  top: 10vh;
+  right: 25vh;
+  width: 450px;
+  background: silver;
+  border: 3px solid grey;
+  border-top: solid snow;
+  border-left: solid snow;
+  color: black;
 }
 
 #header {

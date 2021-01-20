@@ -10,6 +10,8 @@ const clocktens = document.getElementById('clocktens')
 const clockones = document.getElementById('clockones')
 const newGameButton = document.getElementById('newgame')
 const difficulty = document.getElementById('difficulty')
+const howToButton = document.getElementById('howtoplay')
+const howToDiv = document.getElementById('howtodiv')
 
 //! Variables
 
@@ -32,6 +34,11 @@ let winningArr = []
 
 
 //* Functions
+
+//! How to button
+howToButton.addEventListener('click', (event) => howToDiv.style.display = howToDiv.style.display === 'none' ? '' : 'none')
+
+
 
 //! New Game Button
 newGameButton.addEventListener('click', (event) => {

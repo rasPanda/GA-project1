@@ -8,15 +8,28 @@
   <link rel="stylesheet" href="main.css">
   <title>Minesweeper</title>
 </head>
+
 <body>
   <div id='container'>
-    <div id='options'>
-      <select name="difficulty" id="difficulty">
-        <option value="beginner">Beginner</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="expert">Expert</option>
-      </select>
-      <button type="button" id='newgame'>New Game</button>
+    <div id='optionscontainer'>
+      <div id='options'>
+        <select name="difficulty" id="difficulty">
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="expert">Expert</option>
+        </select>
+        <button type="button" id='newgame'>New Game</button>
+      </div>
+      <button type="button" id='howtoplay'>How to play</button>
+      <div id='howtodiv' style='display: none'>
+        <ul>
+          <li>Try to find all the mines!</li>
+          <li><b>Left click:</b> Reveal covered cell.</li>
+          <li><b>Right click:</b> Flag covered cell (if you think there's a mine there).</li>
+          <li><b>Middle click (left+right click):</b> On a revealed cell, to reveal neighbours!<br>If there are no mines in the neighbours, the cells will be revealed.</li>
+          <li>Once you've flagged all the mines and cleared all other cells, you win!</li>
+        </ul>
+      </div>
     </div>
     <main id='main'>
       <div id='header'>
