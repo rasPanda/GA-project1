@@ -305,9 +305,52 @@ function createEventListeners() {
     })
   })
 
-  //! Prevent right-click default
+  //! Mouseover
+  cellsArr.forEach((cell) => {
+    cell.addEventListener('mouseover', (event) => {
+      //? If cell is not revealed
+      if (clearedArr[(parseInt(event.currentTarget.id))] === false) {
+        //? Middle Click
+        if (leftButton === true && rightButton === true) {
+          mouseDownDoubleCovered((parseInt(event.currentTarget.id)))
+          cellsArr[(parseInt(event.currentTarget.id))].classList.remove('facingDown')
+          cellsArr[(parseInt(event.currentTarget.id))].classList.add('_0')
+          //? Left Click
+        } else if (leftButton === true) {
+          mouseDownCovered((parseInt(event.currentTarget.id)))
+        }
+      }
+    })
+  })
 
+  //! Mouseout
+  cellsArr.forEach((cell) => {
+    cell.addEventListener('mouseout', (event) => {
+      //? If cell is not revealed
+      if (clearedArr[(parseInt(event.currentTarget.id))] === false) {
+        //? Middle Click
+        if (leftButton === true && rightButton === true) {
+          mouseUpDoubleCovered((parseInt(event.currentTarget.id)))
+          //? Left Click
+        } else if (leftButton === true) {
+          mouseUpCovered((parseInt(event.currentTarget.id)))
+        }
+      }
+    })
+  })
 }
+
+//! If mouseleave of grid 
+setupGrid.addEventListener('mouseleave', (event) => {
+  if (leftButton === true) {
+    leftButton === false
+  }
+  if (rightButton === true) {
+    rightButton === false
+  }
+  smileyButton.classList.remove('smileyooh')
+  smileyButton.classList.add('smiley')
+})
 
 //! Check neighbours
 

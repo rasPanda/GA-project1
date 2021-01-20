@@ -24,6 +24,10 @@ main {
   border: 3px solid grey;
   border-top: solid snow;
   border-left: solid snow;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #options {
