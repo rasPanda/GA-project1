@@ -276,13 +276,11 @@ function createEventListeners() {
         smileyButton.classList.add('smiley')
 
         //! Win condition
-        if (minesLeft === 0) {
-          if (winGame() === true) {
-            smileyButton.classList.remove('smiley')
-            smileyButton.classList.add('smileywin')
-            clearInterval(timerInt)
-            cellsArr = []
-          }
+        if (winGame() === true) {
+          smileyButton.classList.remove('smiley')
+          smileyButton.classList.add('smileywin')
+          clearInterval(timerInt)
+          cellsArr = []
         }
       }
 
@@ -299,11 +297,16 @@ function createEventListeners() {
       }, 1000)
     })
   })
+
+  //! Prevent right-click default
   cellsArr.forEach((cell) => {
     cell.addEventListener('contextmenu', (event) => {
       event.preventDefault()
     })
   })
+
+  //! Prevent right-click default
+
 }
 
 //! Check neighbours
@@ -362,7 +365,9 @@ function endGame(cellId) {
 }
 
 function winGame() {
-  return winningArr.every(cell => cell === true)
+  if (minesLeft === 0 && winningArr.every(cell => cell === true)) {
+    return winningArr.every(cell => cell === true)
+  }
 }
 
 //! Smiley Button + Reset game
