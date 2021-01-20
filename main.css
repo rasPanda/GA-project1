@@ -4,21 +4,46 @@
 }
 
 body {
-  height: 100vh;
+  height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin: 0
+  margin: 0;
+}
+
+#container {
+  display: flex;
+  flex-direction: column;
 }
 
 main {
   display: flex;
   flex-direction: column;
   background: silver;
-  border: 2px solid grey;
+  border: 3px solid grey;
   border-top: solid snow;
   border-left: solid snow;
+}
+
+#options {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: 10px 5px;
+}
+
+#difficulty {
+  font-size: 10px;
+  width: 70px;
+  cursor: pointer;
+  margin: 0px 0px 2px 0px;
+}
+
+#newgame {
+  font-size: 10px;
+  width: 70px;
+  cursor: pointer;
 }
 
 #header {
@@ -26,18 +51,35 @@ main {
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  border: 2px solid grey;
+  border: 3px solid grey;
   border-bottom: solid snow;
   border-right: solid snow;
   margin: 5px 5px 0px 5px;
-  padding: 10px;
+  padding: 5px 10px;
 }
 
 .headerelement {
-  padding: 2px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 0;
   margin: 0;
-  height: 30px;
-  width: 30px;
+}
+
+.timers {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  height: 23px;
+  width: 13px;
+}
+
+#smiley {
+  padding: 0;
+  margin: 0;
+  height: 25px;
+  width: 25px;
 }
 
 #grid {
@@ -45,6 +87,64 @@ main {
   flex-direction: row;
   flex-wrap: wrap;
   margin: 5px;
+  border: 3px solid grey;
+  border-bottom: solid snow;
+  border-right: solid snow;
+}
+
+.time0 {
+  background: url('./images/time0.png') no-repeat;
+  background-size: contain;
+}
+
+.time1 {
+  background: url('./images/time1.png') no-repeat;
+  background-size: contain;
+}
+
+.time2 {
+  background: url('./images/time2.png') no-repeat;
+  background-size: contain;
+}
+
+.time3 {
+  background: url('./images/time3.png') no-repeat;
+  background-size: contain;
+}
+
+.time4 {
+  background: url('./images/time4.png') no-repeat;
+  background-size: contain;
+}
+
+.time5 {
+  background: url('./images/time5.png') no-repeat;
+  background-size: contain;
+}
+
+.time6 {
+  background: url('./images/time6.png') no-repeat;
+  background-size: contain;
+}
+
+.time7 {
+  background: url('./images/time7.png') no-repeat;
+  background-size: contain;
+}
+
+.time8 {
+  background: url('./images/time8.png') no-repeat;
+  background-size: contain;
+}
+
+.time9 {
+  background: url('./images/time9.png') no-repeat;
+  background-size: contain;
+}
+
+.timeneg {
+  background: url('./images/timeneg.png') no-repeat;
+  background-size: contain;
 }
 
 .smileyooh {

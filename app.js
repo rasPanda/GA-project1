@@ -1,11 +1,17 @@
 //! DOM elements
 
 const setupGrid = document.getElementById('grid')
-// const gameGrid = Array.from(document.getElementById('grid'))
-// console.log(gameGrid)
 const smileyButton = document.getElementById('smiley')
-const minesCounter = document.getElementById('minesleft')
-const clock = document.getElementById('clock')
+// const minesCounter = document.getElementById('minesleft')
+// const clock = document.getElementById('clock')
+const mineshundreds = document.getElementById('mineshundreds')
+const minestens = document.getElementById('minestens')
+const minesones = document.getElementById('minesones')
+const clockhundreds = document.getElementById('clockhundreds')
+const clocktens = document.getElementById('clocktens')
+const clockones = document.getElementById('clockones')
+const newGameButton = document.getElementById('newgame')
+const difficulty = document.getElementById('difficulty')
 
 //! Variables
 
@@ -14,6 +20,7 @@ let height = 9
 let minesToSet = 10
 let minesLeft = 10
 let timerInt = 0
+let clockDisplay = 0
 let leftButton = false
 let rightButton = false
 
@@ -23,14 +30,49 @@ let cellsArr = []
 let minesArr = []
 let flaggedArr = []
 let clearedArr = []
+let winningArr = []
 
-console.log(cellsArr)
-console.log(minesArr)
-console.log(flaggedArr)
+// console.log(cellsArr)
+// console.log(minesArr)
+// console.log(flaggedArr)
 
 
 
-//! Functions
+//* Functions
+
+//! New Game Button
+newGameButton.addEventListener('click', (event) => {
+  console.log('click')
+  switch (difficulty.value) {
+    case 'beginner':
+      resetGame()
+      width = 9
+      height = 9
+      minesLeft = 10
+      minesToSet = 10
+      setUpGame()
+      break
+    case 'intermediate':
+      resetGame()
+      width = 16
+      height = 16
+      minesLeft = 40
+      minesToSet = 40
+      setUpGame()
+      break
+    case 'expert':
+      resetGame()
+      width = 30
+      height = 16
+      minesLeft = 99
+      minesToSet = 99
+      setUpGame()
+      break
+    default:
+      break
+  }
+})
+
 
 //! Set up the game
 
@@ -39,6 +81,7 @@ function setUpGame() {
   setMines()
   createFlaggedArr()
   createClearedArr()
+  createWinningArr()
   createEventListeners()
 }
 
@@ -55,17 +98,17 @@ function createGrid() {
     setupGrid.appendChild(cell)
     cellsArr.push(cell)
     // ? Number each cell by its index.
-    cell.innerHTML = index
+    // cell.innerHTML = index
     cell.setAttribute('id', index)
     // ? Set the width and height of grid
     if (width <= 16) {
-      setupGrid.style.width = `${25 * width}px`
-      setupGrid.style.height = `${25 * height}px`
+      setupGrid.style.width = `${20 * width}px`
+      setupGrid.style.height = `${20 * height}px`
       cell.style.width = `${100 / width}%`
       cell.style.height = `${100 / height}%`
     } else {
-      setupGrid.style.width = `${25 * width}px`
-      setupGrid.style.height = '400px'
+      setupGrid.style.width = `${20 * width}px`
+      setupGrid.style.height = '320px'
       cell.style.width = `${100 / width}%`
       cell.style.height = `${100 / height}%`
     }
@@ -82,8 +125,12 @@ function setMines() {
     minesArr.push(false)
   }
   minesArr.sort(() => 0.5 - Math.random())
-  minesLeft = 10
-  minesCounter.innerHTML = minesLeft
+  mineshundreds.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+  minestens.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+  minesones.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+  mineshundreds.classList.add(`time${Math.floor((minesLeft / 100) % 10)}`)
+  minestens.classList.add(`time${Math.floor((minesLeft / 10) % 10)}`)
+  minesones.classList.add(`time${Math.floor(minesLeft % 10)}`)
 }
 
 
@@ -96,6 +143,12 @@ function createFlaggedArr() {
 function createClearedArr() {
   for (let index = 0; index < cellsArr.length; index++) {
     clearedArr.push(false)
+  }
+}
+
+function createWinningArr() {
+  for (let index = 0; index < cellsArr.length; index++) {
+    winningArr.push(false)
   }
 }
 
@@ -244,7 +297,6 @@ function createEventListeners() {
         } else if (event.button === 2) {
           rightButton = false
         }
-        console.log(clearedArr)
         //! Smiley
         smileyButton.classList.remove('smileyooh')
         smileyButton.classList.add('smiley')
@@ -255,17 +307,22 @@ function createEventListeners() {
             console.log('win!')
             smileyButton.classList.remove('smiley')
             smileyButton.classList.add('smileywin')
+            clearInterval(timerInt)
+            cellsArr = []
           }
         }
       }
 
-      //! Clock
+      //! Clock display
       if (timerInt) {
         return
-      } else
-        clock.innerHTML = 1
+      } else {
+        clockDisplay = 1
+        clockones.classList.add(`time${Math.floor(clockDisplay % 10)}`)
+      }
       timerInt = setInterval(() => {
-        clock.innerHTML++
+        clockDisplay++
+        updateClockDisplay()
       }, 1000)
     })
   })
@@ -338,10 +395,7 @@ function endGame(cellId) {
 
 
 function winGame() {
-  for (let index = 0; index < minesArr.length; index++) {
-    if (minesArr[index] !== flaggedArr[index]) return false
-  }
-  return true
+  return winningArr.every(cell => cell === true)
 }
 
 //! Smiley Button + Reset game
@@ -354,9 +408,17 @@ smileyButton.addEventListener('mousedown', (event) => {
 smileyButton.addEventListener('mouseup', (event) => {
   smileyButton.classList.remove('smileydown')
   smileyButton.classList.add('smiley')
+
+  resetGame()
+
+  setUpGame()
+})
+
+function resetGame() {
   clearInterval(timerInt)
   timerInt = 0
-  clock.innerHTML = 0
+  clockDisplay = 0
+  minesLeft = 10
   while (setupGrid.hasChildNodes()) {
     setupGrid.removeChild(setupGrid.lastChild)
   }
@@ -364,8 +426,37 @@ smileyButton.addEventListener('mouseup', (event) => {
   minesArr = []
   flaggedArr = []
   clearedArr = []
-  setUpGame()
-})
+  winningArr = []
+
+  clockhundreds.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+  clocktens.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+  clockones.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+  clockones.classList.add('time0')
+  clocktens.classList.add('time0')
+  clockhundreds.classList.add('time0')
+
+  mineshundreds.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+  minestens.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+  minesones.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+  mineshundreds.classList.add(`time${Math.floor((minesLeft / 100) % 10)}`)
+  minestens.classList.add(`time${Math.floor((minesLeft / 10) % 10)}`)
+  minesones.classList.add(`time${Math.floor(minesLeft % 10)}`)
+}
+
+//! Clock display
+
+function updateClockDisplay() {
+  if (clockDisplay < 999) {
+    clockhundreds.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+    clockhundreds.classList.add(`time${Math.floor((clockDisplay / 100) % 10)}`)
+    clocktens.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+    clocktens.classList.add(`time${Math.floor((clockDisplay / 10) % 10)}`)
+    clockones.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+    clockones.classList.add(`time${Math.floor(clockDisplay % 10)}`)
+  } else {
+    return
+  }
+}
 
 //! Mouse up/down
 
@@ -432,6 +523,7 @@ function revealCell(cellId) {
       if (clearedArr[cellId] === false) {
         cellsArr[cellId].classList.add('_0')
         clearedArr[cellId] = true
+        winningArr[cellId] = true
         for (let index = 0; index < neighbours.length; index++) {
           revealCell(neighbours[index])
         }
@@ -440,6 +532,7 @@ function revealCell(cellId) {
       cellsArr[cellId].classList.remove('facingDown')
       cellsArr[cellId].classList.add(`_${numOfMinesInNeighbours}`)
       clearedArr[cellId] = true
+      winningArr[cellId] = true
     }
   }
 }
@@ -454,14 +547,38 @@ function flagCell(cellId) {
     cellsArr[cellId].classList.remove('facingDown')
     cellsArr[cellId].classList.add('flagged')
     flaggedArr[cellId] = true
+    winningArr[cellId] = true
     minesLeft--
-    minesCounter.innerHTML = minesLeft
+    mineshundreds.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+    minestens.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+    minesones.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+    if (minesLeft < 0) {
+      mineshundreds.classList.add('timeneg')
+      minestens.classList.add(`time${Math.floor((Math.abs(minesLeft) / 10) % 10)}`)
+      minesones.classList.add(`time${Math.floor(Math.abs(minesLeft) % 10)}`)
+    } else {
+      mineshundreds.classList.add(`time${Math.floor((minesLeft / 100) % 10)}`)
+      minestens.classList.add(`time${Math.floor((minesLeft / 10) % 10)}`)
+      minesones.classList.add(`time${Math.floor(minesLeft % 10)}`)
+    }
   } else {
     cellsArr[cellId].classList.remove('flagged')
     cellsArr[cellId].classList.add('facingDown')
     flaggedArr[cellId] = false
+    winningArr[cellId] = false
     minesLeft++
-    minesCounter.innerHTML = minesLeft
+    mineshundreds.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+    minestens.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+    minesones.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
+    if (minesLeft < 0) {
+      mineshundreds.classList.add('timeneg')
+      minestens.classList.add(`time${Math.floor((Math.abs(minesLeft) / 10) % 10)}`)
+      minesones.classList.add(`time${Math.floor(Math.abs(minesLeft) % 10)}`)
+    } else {
+      mineshundreds.classList.add(`time${Math.floor((minesLeft / 100) % 10)}`)
+      minestens.classList.add(`time${Math.floor((minesLeft / 10) % 10)}`)
+      minesones.classList.add(`time${Math.floor(minesLeft % 10)}`)
+    }
   }
 }
 

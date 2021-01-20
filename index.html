@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +9,33 @@
   <title>Minesweeper</title>
 </head>
 <body>
-<main id='main'>
-<div id='header'>
-  <div class='headerelement' id='minesleft'>0</div>
-  <div class='headerelement smiley' id='smiley'></div>
-  <div class='headerelement' id='clock'>0</div>
-</div>
-<div id='grid'></div>
-</main>
+  <div id='container'>
+    <div id='options'>
+      <select name="difficulty" id="difficulty">
+        <option value="beginner">Beginner</option>
+        <option value="intermediate">Intermediate</option>
+        <option value="expert">Expert</option>
+      </select>
+      <button type="button" id='newgame'>New Game</button>
+    </div>
+    <main id='main'>
+      <div id='header'>
+        <div class='headerelement' id='minesleft'>
+          <div class='timers time0' id='mineshundreds'></div>
+          <div class='timers time0' id='minestens'></div>
+          <div class='timers time0' id='minesones'></div>
+        </div>
+        <div class='headerelement smiley' id='smiley'></div>
+        <div class='headerelement' id='clock'>
+          <div class='timers time0' id='clockhundreds'></div>
+          <div class='timers time0' id='clocktens'></div>
+          <div class='timers time0' id='clockones'></div>
+        </div>
+      </div>
+      <div id='grid'></div>
+    </main>
+  </div>
   <script src="app.js"></script>
 </body>
+
 </html>
