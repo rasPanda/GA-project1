@@ -2,8 +2,6 @@
 
 const setupGrid = document.getElementById('grid')
 const smileyButton = document.getElementById('smiley')
-// const minesCounter = document.getElementById('minesleft')
-// const clock = document.getElementById('clock')
 const mineshundreds = document.getElementById('mineshundreds')
 const minestens = document.getElementById('minestens')
 const minesones = document.getElementById('minesones')
@@ -32,17 +30,11 @@ let flaggedArr = []
 let clearedArr = []
 let winningArr = []
 
-// console.log(cellsArr)
-// console.log(minesArr)
-// console.log(flaggedArr)
-
-
 
 //* Functions
 
 //! New Game Button
 newGameButton.addEventListener('click', (event) => {
-  console.log('click')
   switch (difficulty.value) {
     case 'beginner':
       resetGame()
@@ -222,9 +214,6 @@ function createEventListeners() {
           smileyButton.classList.add('smiley')
         }
 
-
-
-
         //? If cell is revealed
       } else if (clearedArr[(parseInt(event.currentTarget.id))] === true) {
         if (leftButton === true && rightButton === true) {
@@ -247,9 +236,7 @@ function createEventListeners() {
           const coveredNeighboursWithMines = []
           const coveredNeighboursNoMines = []
           const coveredNeighboursWithFlags = []
-          // const coveredNeighboursNoFlags = []
           const coveredNeighboursWithMinesAndFlags = []
-          // const coveredNeighboursNoMinesAndFlags = []
 
           for (let index = 0; index < coveredNeighbours.length; index++) {
             if (minesArr[coveredNeighbours[index]] === true) {
@@ -261,24 +248,10 @@ function createEventListeners() {
             if (flaggedArr[coveredNeighbours[index]] === true) {
               coveredNeighboursWithFlags.push(coveredNeighbours[index])
             }
-            // if (flaggedArr[coveredNeighbours[index]] === false) {
-            //   coveredNeighboursNoFlags.push(coveredNeighbours[index])
-            // }
             if (flaggedArr[coveredNeighbours[index]] === true && minesArr[coveredNeighbours[index]] === true) {
               coveredNeighboursWithMinesAndFlags.push(coveredNeighbours[index])
             }
-            // if (flaggedArr[coveredNeighbours[index]] === false && minesArr[coveredNeighbours[index]] === false) {
-            //   coveredNeighboursNoMinesAndFlags.push(coveredNeighbours[index])
-            // }
           }
-
-          // console.log(`covered neighour arr: ${coveredNeighbours}`)
-          // console.log(`coveredNeighboursWithMines ${coveredNeighboursWithMines}`)
-          // console.log(`coveredNeighboursNoMines ${coveredNeighboursNoMines}`)
-          // console.log(`coveredNeighboursWithFlags ${coveredNeighboursWithFlags}`)
-          // console.log(`coveredNeighboursNoFlags ${coveredNeighboursNoFlags}`)
-          // console.log(`coveredNeighboursWithMinesAndFlags ${coveredNeighboursWithMinesAndFlags}`)
-          // console.log(`coveredNeighboursNoMinesAndFlags ${coveredNeighboursNoMinesAndFlags}`)
 
           //? Check if there are any wrong flags. If yes, end game.
           if (coveredNeighboursWithMines.length > 0 && coveredNeighboursWithFlags.length > 0 && coveredNeighboursWithMinesAndFlags.toString() !== coveredNeighboursWithFlags.toString()) {
@@ -297,6 +270,7 @@ function createEventListeners() {
         } else if (event.button === 2) {
           rightButton = false
         }
+
         //! Smiley
         smileyButton.classList.remove('smileyooh')
         smileyButton.classList.add('smiley')
@@ -304,7 +278,6 @@ function createEventListeners() {
         //! Win condition
         if (minesLeft === 0) {
           if (winGame() === true) {
-            console.log('win!')
             smileyButton.classList.remove('smiley')
             smileyButton.classList.add('smileywin')
             clearInterval(timerInt)
@@ -333,10 +306,7 @@ function createEventListeners() {
   })
 }
 
-
-
 //! Check neighbours
-
 
 function countNeighbours(neighbourArr) {
   const numOfMinesArr = []
@@ -345,7 +315,6 @@ function countNeighbours(neighbourArr) {
   }
   return numOfMinesArr.filter(x => x).length
 }
-
 
 function createNeighboursArr(cellId) {
   if (cellId === 0) {
@@ -369,7 +338,6 @@ function createNeighboursArr(cellId) {
   }
 }
 
-
 //! End Game
 
 function endGame(cellId) {
@@ -392,7 +360,6 @@ function endGame(cellId) {
   smileyButton.classList.add('smileydead')
   cellsArr = []
 }
-
 
 function winGame() {
   return winningArr.every(cell => cell === true)
@@ -427,14 +394,12 @@ function resetGame() {
   flaggedArr = []
   clearedArr = []
   winningArr = []
-
   clockhundreds.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
   clocktens.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
   clockones.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
   clockones.classList.add('time0')
   clocktens.classList.add('time0')
   clockhundreds.classList.add('time0')
-
   mineshundreds.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
   minestens.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
   minesones.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
