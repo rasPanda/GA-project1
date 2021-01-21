@@ -1,5 +1,6 @@
 //! DOM elements
 
+const main = document.getElementById('main')
 const setupGrid = document.getElementById('grid')
 const smileyButton = document.getElementById('smiley')
 const mineshundreds = document.getElementById('mineshundreds')
@@ -12,9 +13,15 @@ const newGameButton = document.getElementById('newgame')
 const difficulty = document.getElementById('difficulty')
 const howToButton = document.getElementById('howtoplay')
 const howToDiv = document.getElementById('howtodiv')
+const beginnerboard = document.getElementById('beginnerboard')
+const intermediateboard = document.getElementById('intermediateboard')
+const expertboard = document.getElementById('expertboard')
 
 //! Variables
 
+let beginnerScores = []
+let intermediateScores = []
+let expertScores = []
 let width = 9
 let height = 9
 let minesToSet = 10
@@ -23,6 +30,16 @@ let timerInt = 0
 let clockDisplay = 0
 let leftButton = false
 let rightButton = false
+
+if (localStorage) {
+  beginnerScores = JSON.parse(localStorage.getItem('beginnerHighScores')) || []
+  intermediateScores = JSON.parse(localStorage.getItem('intermediateHighScores')) || []
+  expertScores = JSON.parse(localStorage.getItem('expertHighScores')) || []
+  orderAndDisplayScores()
+}
+
+// localStorage.clear()
+
 
 //! Arrays
 
@@ -36,8 +53,8 @@ let winningArr = []
 //* Functions
 
 //! How to button
-howToButton.addEventListener('click', (event) => howToDiv.style.display = howToDiv.style.display === 'none' ? '' : 'none')
-
+// howToButton.addEventListener('click', (event) => howToDiv.style.display = howToDiv.style.display === 'none' ? '' : 'none')
+howToButton.addEventListener('click', (event) => scoreBoard())
 
 
 //! New Game Button
@@ -305,13 +322,6 @@ function createEventListeners() {
     })
   })
 
-  //! Prevent right-click default
-  cellsArr.forEach((cell) => {
-    cell.addEventListener('contextmenu', (event) => {
-      event.preventDefault()
-    })
-  })
-
   //! Mouseover
   cellsArr.forEach((cell) => {
     cell.addEventListener('mouseover', (event) => {
@@ -346,6 +356,12 @@ function createEventListeners() {
     })
   })
 }
+
+//! Prevent right-click default
+main.addEventListener('contextmenu', (event) => {
+  event.preventDefault()
+})
+
 
 //! If mouseleave of grid 
 setupGrid.addEventListener('mouseleave', (event) => {
@@ -414,11 +430,65 @@ function endGame(cellId) {
   cellsArr = []
 }
 
+//! Win Game check + Scoreboard
+
 function winGame() {
   if (minesLeft === 0 && winningArr.every(cell => cell === true)) {
     return winningArr.every(cell => cell === true)
   }
 }
+
+function scoreBoard() {
+  if (confirm(('Congrats on the win, your time made it on the scoreboard! Do you want to save your score?'))) {
+    const newName = prompt('Great! What\'s your name?')
+    const player = { name: newName, score: clockDisplay }
+    switch (difficulty.value) {
+      case 'beginner':
+        beginnerScores.push(player)
+        if (localStorage) {
+          localStorage.setItem('beginnerHighScores', JSON.stringify(beginnerScores))
+        }
+        break
+      case 'intermediate':
+        intermediateScores.push(player)
+        if (localStorage) {
+          localStorage.setItem('intermediateHighScores', JSON.stringify(intermediateScores))
+        }
+        break
+      case 'expert':
+        expertScores.push(player)
+        if (localStorage) {
+          localStorage.setItem('expertHighScores', JSON.stringify(expertScores))
+        }
+        break
+      default:
+        break
+    }
+    orderAndDisplayScores()
+  } else {
+    return
+  }
+}
+
+function orderAndDisplayScores() {
+
+  const beginnerArr = beginnerScores.sort((playerA, playerB) => playerA.score - playerB.score).map(player => {
+    return `<li>${player.name} with a time of ${player.score}/li>`
+  })
+  beginnerboard.innerHTML = beginnerArr.join('')
+  
+  const intermediateArr = intermediateScores.sort((playerA, playerB) => playerA.score - playerB.score).map(player => {
+    return `<li>${player.name} with a time of ${player.score}/li>`
+  })
+  intermediateboard.innerHTML = intermediateArr.join('')
+
+  const expertArr = expertScores.sort((playerA, playerB) => playerA.score - playerB.score).map(player => {
+    return `<li>${player.name} with a time of ${player.score}</li>`
+  })
+  expertboard.innerHTML = expertArr.join('')
+
+}
+
 
 //! Smiley Button + Reset game
 
@@ -466,7 +536,7 @@ function resetGame() {
 //! Clock display
 
 function updateClockDisplay() {
-  if (clockDisplay < 999) {
+  if (clockDisplay <= 999) {
     clockhundreds.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')
     clockhundreds.classList.add(`time${Math.floor((clockDisplay / 100) % 10)}`)
     clocktens.classList.remove('time0', 'time1', 'time2', 'time3', 'time4', 'time5', 'time6', 'time7', 'time8', 'time9', 'timeneg')

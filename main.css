@@ -8,7 +8,7 @@
 }
 
 body {
-  height: 90vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -32,6 +32,7 @@ main {
   border: 3px solid grey;
   border-top: solid snow;
   border-left: solid snow;
+  margin: 0px 0px 10px 0px;
 }
 
 #options {
@@ -74,7 +75,7 @@ main {
   width: 80px;
   position: absolute;
   top: 10vh;
-  right: 25vh;
+  right: 50vh;
   width: 450px;
   background: silver;
   border: 3px solid grey;
@@ -110,6 +111,39 @@ main {
   margin: 0;
   height: 23px;
   width: 13px;
+}
+
+#scoreboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  
+}
+
+.boards {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 30px 20px 30px;
+}
+
+h2 {
+  font-size: 20px;
+  padding: 0;
+  margin: 0;
+  text-decoration: underline;
+}
+
+h3 {
+  font-size: 15px;
+  padding: 0;
+}
+
+ol {
+  font-size: 10px;
+  padding: 0;
 }
 
 #smiley {
