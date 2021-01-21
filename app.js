@@ -437,35 +437,53 @@ function winGame() {
 }
 
 function scoreBoard() {
-  if (confirm(('Congrats on the win, your time made it on the scoreboard! Do you want to save your score?'))) {
-    const newName = prompt('Great! What\'s your name?')
-    const player = { name: newName, score: clockDisplay }
-    switch (difficulty.value) {
-      case 'beginner':
-        beginnerScores.push(player)
-        if (localStorage) {
-          localStorage.setItem('beginnerHighScores', JSON.stringify(beginnerScores))
+  switch (difficulty.value) {
+    case 'beginner':
+      if (beginnerScores.length < 3) {
+        if (confirm(('Congrats on the win, your time made it on the scoreboard! Do you want to save your score?'))) {
+          const newName = prompt('Great! What\'s your name?')
+          const player = { name: newName, score: clockDisplay }
+          beginnerScores.push(player)
+          if (localStorage) {
+            localStorage.setItem('beginnerHighScores', JSON.stringify(beginnerScores))
+          }
         }
-        break
-      case 'intermediate':
-        intermediateScores.push(player)
-        if (localStorage) {
-          localStorage.setItem('intermediateHighScores', JSON.stringify(intermediateScores))
+      } else {
+        return
+      }
+      break
+    case 'intermediate':
+      if (intermediateScores.length < 3) {
+        if (confirm(('Congrats on the win, your time made it on the scoreboard! Do you want to save your score?'))) {
+          const newName = prompt('Great! What\'s your name?')
+          const player = { name: newName, score: clockDisplay }
+          intermediateScores.push(player)
+          if (localStorage) {
+            localStorage.setItem('beginnerHighScores', JSON.stringify(intermediateScores))
+          }
         }
-        break
-      case 'expert':
-        expertScores.push(player)
-        if (localStorage) {
-          localStorage.setItem('expertHighScores', JSON.stringify(expertScores))
+      } else {
+        return
+      }
+      break
+    case 'expert':
+      if (expertScores.length < 3) {
+        if (confirm(('Congrats on the win, your time made it on the scoreboard! Do you want to save your score?'))) {
+          const newName = prompt('Great! What\'s your name?')
+          const player = { name: newName, score: clockDisplay }
+          expertScores.push(player)
+          if (localStorage) {
+            localStorage.setItem('beginnerHighScores', JSON.stringify(expertScores))
+          }
         }
-        break
-      default:
-        break
-    }
-    orderAndDisplayScores()
-  } else {
-    return
+      } else {
+        return
+      }
+      break
+    default:
+      break
   }
+  orderAndDisplayScores()
 }
 
 function orderAndDisplayScores() {
