@@ -38,9 +38,6 @@ if (localStorage) {
   orderAndDisplayScores()
 }
 
-// localStorage.clear()
-
-
 //! Arrays
 
 let cellsArr = []
@@ -53,8 +50,7 @@ let winningArr = []
 //* Functions
 
 //! How to button
-// howToButton.addEventListener('click', (event) => howToDiv.style.display = howToDiv.style.display === 'none' ? '' : 'none')
-howToButton.addEventListener('click', (event) => scoreBoard())
+howToButton.addEventListener('click', (event) => howToDiv.style.display = howToDiv.style.display === 'none' ? '' : 'none')
 
 
 //! New Game Button
@@ -294,18 +290,19 @@ function createEventListeners() {
         } else if (event.button === 2) {
           rightButton = false
         }
+      }
 
-        //! Smiley
-        smileyButton.classList.remove('smileyooh')
-        smileyButton.classList.add('smiley')
+      //! Smiley
+      smileyButton.classList.remove('smileyooh')
+      smileyButton.classList.add('smiley')
 
-        //! Win condition
-        if (winGame() === true) {
-          smileyButton.classList.remove('smiley')
-          smileyButton.classList.add('smileywin')
-          clearInterval(timerInt)
-          cellsArr = []
-        }
+      //! Win condition
+      if (winGame() === true) {
+        smileyButton.classList.remove('smiley')
+        smileyButton.classList.add('smileywin')
+        clearInterval(timerInt)
+        cellsArr = []
+        scoreBoard()
       }
 
       //! Clock display
@@ -325,17 +322,14 @@ function createEventListeners() {
   //! Mouseover
   cellsArr.forEach((cell) => {
     cell.addEventListener('mouseover', (event) => {
-      //? If cell is not revealed
-      if (clearedArr[(parseInt(event.currentTarget.id))] === false) {
-        //? Middle Click
-        if (leftButton === true && rightButton === true) {
-          mouseDownDoubleCovered((parseInt(event.currentTarget.id)))
-          cellsArr[(parseInt(event.currentTarget.id))].classList.remove('facingDown')
-          cellsArr[(parseInt(event.currentTarget.id))].classList.add('_0')
-          //? Left Click
-        } else if (leftButton === true) {
-          mouseDownCovered((parseInt(event.currentTarget.id)))
-        }
+      //? Middle Click
+      if (leftButton === true && rightButton === true) {
+        mouseDownDoubleCovered((parseInt(event.currentTarget.id)))
+        cellsArr[(parseInt(event.currentTarget.id))].classList.remove('facingDown')
+        cellsArr[(parseInt(event.currentTarget.id))].classList.add('_0')
+        //? Left Click
+      } else if (leftButton === true) {
+        mouseDownCovered((parseInt(event.currentTarget.id)))
       }
     })
   })
@@ -351,6 +345,10 @@ function createEventListeners() {
           //? Left Click
         } else if (leftButton === true) {
           mouseUpCovered((parseInt(event.currentTarget.id)))
+        }
+      } else if (clearedArr[(parseInt(event.currentTarget.id))] === true) {
+        if (leftButton === true && rightButton === true) {
+          mouseUpDoubleRevealed((parseInt(event.currentTarget.id)))
         }
       }
     })
@@ -473,17 +471,17 @@ function scoreBoard() {
 function orderAndDisplayScores() {
 
   const beginnerArr = beginnerScores.sort((playerA, playerB) => playerA.score - playerB.score).map(player => {
-    return `<li>${player.name} with a time of ${player.score}/li>`
+    return `<li><b>${player.name}</b> with a time of ${player.score}</li>`
   })
   beginnerboard.innerHTML = beginnerArr.join('')
-  
+
   const intermediateArr = intermediateScores.sort((playerA, playerB) => playerA.score - playerB.score).map(player => {
-    return `<li>${player.name} with a time of ${player.score}/li>`
+    return `<li><b>${player.name}</b> with a time of ${player.score}</li>`
   })
   intermediateboard.innerHTML = intermediateArr.join('')
 
   const expertArr = expertScores.sort((playerA, playerB) => playerA.score - playerB.score).map(player => {
-    return `<li>${player.name} with a time of ${player.score}</li>`
+    return `<li><b>${player.name}</b> with a time of ${player.score}</li>`
   })
   expertboard.innerHTML = expertArr.join('')
 
