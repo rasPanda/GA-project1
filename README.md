@@ -1,4 +1,4 @@
-![ga_cog_large_red_rgb](images/GA logo.png)
+![ga_cog_large_red_rgb](./images/GA logo.png)
 	
 	
 ### Software Engineering Immersive
@@ -108,7 +108,7 @@ function createGrid() {
 ```
 Completed Grid:
 
-![Completed Grid](images/completed grid.png)
+![Completed Grid](./images/completed grid.png)
 
 
 Mines were then set-up and locations randomised:
@@ -223,7 +223,7 @@ function revealCell(cellId) {
 }
 ```
 E.g. if the player clicks the bottom right corner cell, a chain reaction triggers which reveals a large section of the grid:
-![Reveal recursion](images/reveal recursion.png)
+![Reveal recursion](./images/reveal recursion.png)
 
 
 ### 5. Left-click & right-click (simpler) & Middle-click functionality (more complicated)
@@ -386,11 +386,11 @@ The key "middle-click" mechanic code was more complicated as it required very sp
 
 Example: In the below situation, the player assumes there is a mine in the cell to the right, and flags it:
 
-![middle click 1](images/middle click 1.png)
+![middle click 1](./images/middle click 1.png)
 
 Then, after flagging, the player can middle-click on the cell directly to the left of the flagged cell, and the cell above gets revealed due to it being empty.
 
-![middle click 2](images/middle click 2.png)
+![middle click 2](./images/middle click 2.png)
 
 ### 6. UI functionality (Timer, mines counter, scoreboard)
 
