@@ -110,7 +110,6 @@ function createGrid() {
     setupGrid.appendChild(cell)
     cellsArr.push(cell)
     // ? Number each cell by its index.
-    // cell.innerHTML = index
     cell.setAttribute('id', index)
     // ? Set the width and height of grid
     if (width <= 16) {
