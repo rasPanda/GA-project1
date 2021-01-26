@@ -1,4 +1,4 @@
-![ga_cog_large_red_rgb](/images/GA logo.png)
+![ga_cog_large_red_rgb](images/GAlogo.png)
 	
 	
 ### Software Engineering Immersive
@@ -108,7 +108,7 @@ function createGrid() {
 ```
 Completed Grid:
 
-![Completed Grid](./images/completed grid.png)
+![Completed Grid](./images/completedgrid.png)
 
 
 Mines were then set-up and locations randomised:
