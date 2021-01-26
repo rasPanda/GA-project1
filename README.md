@@ -1,4 +1,4 @@
-![ga_cog_large_red_rgb](images/GA logo.png)
+![ga_cog_large_red_rgb](./images/GA logo.png)
 	
 	
 ### Software Engineering Immersive
