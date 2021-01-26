@@ -223,6 +223,7 @@ function revealCell(cellId) {
 }
 ```
 E.g. if the player clicks the bottom right corner cell, a chain reaction triggers which reveals a large section of the grid:
+
 ![Reveal recursion](./images/revealrecursion.png)
 
 
